@@ -2,7 +2,7 @@
 ![Logo](./Mist.png)
 
 ## ❓ What is it?
-> Mist is a simple x86_64 operating system made for learning how the PC works
+***Mist* is a simple x86_64 operating system made for learning how the PC works**
 
 ## 🛠️ How does it works?
 Mist currently has a few essential components:
@@ -51,6 +51,7 @@ Mist currently has a few essential components:
 1. PMM:
 A tool that has a bitmap of all pages and tracks their statuses (1 - already allocated; 0 - free)
 Also it have some functions you can use in your kernel-level programs (And it will be used by many of tools that I will make later)
+
 |Function                |What it does                                    |
 |:----------------------:|:----------------------------------------------:|
 |`alloc()`               |Gives addresses of free page with lowest address|
@@ -74,6 +75,7 @@ Table of functions that it have:
 
 3. VGA driver
 It have couple of functions that using by any functions in standard library
+
 |Name                  |What it does                                    |
 |:--------------------:|:----------------------------------------------:|
 |`vga_clear()`         |Clears the screen without moving cursor         |
@@ -87,33 +89,34 @@ Also you should have GCC to compile Mist
 > **Recomendation** ~~(Again...)~~: Use Linux to this
 You can start with 2 ways:
 
-1. Compile by yourself
-  1. Clone Mist repo:
+- Compile by yourself
+  -. Clone Mist repo:
   ```
   git clone https://github.com/L-fyz/Mist
   ```
-  2. Compile (GCC):
+  -. Compile (GCC):
   ```
   cd ~/Mist
   make
   ```
-  3. Run with QEMU:
+  -. Run with QEMU:
   ```
   make run
   ```
 
-2. Use already compiled Mist.img from repo
-  1. Copy Mist.img:
+- Use already compiled Mist.img from repo
+  - Copy Mist.img:
   ```
   wget https://raw.githubusercontent.com/L-fyz/Mist/main/Mist.img ~/Mist
   ```
-  2. Run with QEMU:
+  - Run with QEMU:
   ```
   qemu-system-x86_64 -drive format=raw,file=Mist.img -no-reboot
   ```
 
 ## 😰 Issues
 ***Mist - young project made by schoolboy***
+
 It can include many errors and bugs
 
 If you have one of these, you can visit the [issues](https://github.com/L-fyz/Mist/issues)
