@@ -36,25 +36,15 @@ p_m:
     mov ss, ax
     mov esp, 0x90000
 
-    mov edi, 0xB8000
-    mov ecx, 2000
-    mov ax, 0x0720
-    cld
-    rep stosw
-
-    mov byte [0xB8000], "H"
-
     mov eax, 0x100000
     mov ebx, 0x10000
-    mov ecx, 30
+    mov ecx, 32768
     .kernel_load:
         mov edi, [ebx]
         mov [eax], edi
         add eax, 4
         add ebx, 4
         loop .kernel_load
-
-    mov byte [0xB8000 + 2], "e"
 
     mov edi, 0x1000
     mov dword [edi], 0x2003
@@ -77,8 +67,6 @@ p_m:
     mov eax, 0x1000
     mov cr3, eax
 
-    mov byte [0xB8000 + 4], "l"
-
     mov eax, cr4
     or eax, 1 << 5
     mov cr4, eax
@@ -87,8 +75,6 @@ p_m:
     rdmsr
     or eax, 1 << 8
     wrmsr
-
-    mov byte [0xB8000 + 6], "l"
 
     mov eax, cr0
     or eax, 1 << 31
@@ -104,10 +90,6 @@ lm_entry:
     mov ss, ax
     mov rsp, 0x90000
 
-    mov rax, 0xB8000
-    add rax, 8
-    mov [rax], "o"
-
     mov rax, 0x100000
     call rax
 
@@ -119,7 +101,7 @@ lm_entry:
 dap:
     db 0x10
     db 0
-    dw 1
+    dw 127
     dw 0x0000
     dw 0x1000
     dq 1

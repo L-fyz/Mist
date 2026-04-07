@@ -1,26 +1,117 @@
-# Mist
-Simple x86_64 operation system
+# 🌫️ Mist
+![Logo](./Mist.png)
 
-## Attention
-DO NOT start this on real PC. It made by junior for quemu
+## ❓ What is it?
+> Mist is a simple x86_64 operating system made for learning how the PC works
 
-## Get started
-1. Clone this to your PC:
-```
-git clone https://github.com/L-fyz/Mist.git ~/Mist
-```
-2. Compile this:
-```
-cd ~/Mist && make
-```
-3. Start with qemu:
-```
-qemu-system-x86_64 -drive format=raw,file=os.img -d int,cpu_reset -no-reboot
-```
+## 🛠️ How does it works?
+Mist currently has a few essential components:
+- Bootloader
+  - Paging
+  - GDT setup
+  - A20 setup
+  - Kernel loading to memory
+- Kernel
+  - PMM
+  - Own standard C library
+  - VGA driver
+Todo:
+- [] VMM
+- [] IDT
+- [] Keyboard driver
+- [] Shell
+- [] Some utils
+- [] etc.
 
-## Todo:
-1. Keyboard driver
-2. Command line
-3. Command line parsing
-4. Some utils
-5. (Maybe) VGA driver
+### Explanation...
+<details>
+#### 🥇 Bootloader
+1. Paging:
+  - Address of PML4: 0x1000
+  - Address of PDPT: 0x2000
+  - Address of PD: 0x3000
+  - __No__ PT: There are 2MB pages
+2. GDT:
+  - GDT settings you can see at the end of boot/BootLoader.asm
+3. A20:
+  - Same as GDT
+4. Kernel load:
+  - Firstly kernel is loaded to the 0x10000 with BIOS interrupts
+  - Then it moves to 0x100000 using a loop
+  - It calls with:
+  ```nasm
+  mov rax, 0x100000
+  call rax
+  ```
+#### 🎯 Kernel
+1. PMM:
+A tool that has a bitmap of all pages and tracks their statuses (1 - already allocated; 0 - free)
+Also it have some functions you can use in your kernel-level programs (And it will be used by many of tools that I will make later)
+|Function              |What it does                                    |
+|:--------------------:|:----------------------------------------------:|
+|alloc()               |Gives addresses of free page with lowest address|
+|pmm_free(addr of page)|Clear status of given page                      |
+2. Standard C library:
+Import:
+```C
+#include <mist.h>
+```
+Table of functions that it have:
+|Name             |What it does                                                                  |
+|:---------------:|:----------------------------------------------------------------------------:|
+|copy(ab, cd, n)  |Clone n bytes from cd to ab                                                   |
+|copyfb(ab, cd, n)|Same as clone() but from the back                                             |
+|fill(ab, c, n)   |Fill ab with c n times                                                        |
+|iseq(ab, cd, n)  |Check the equality of ab and cd (True - ab==cd; False - ab!=cd)               |
+|clear()          |Clears the screen and moves cursor to left up of screen                       |
+|putchar(a)       |Insert a to the cursor place and move cursor right (Down if screen width ends)|
+|print(str)       |Just print... You know                                                        |
+3. VGA driver
+It have couple of functions that using by any functions in standard library
+|Name                |What it does                                    |
+|:------------------:|:----------------------------------------------:|
+|vga_clear()         |Clears the screen without moving cursor         |
+|vga_putchar(x, y, c)|Puts c to place that have (x, y) coordinates    |
+|vga_getchar(x, y)   |Returns character that was on (x, y) coordinates|
+**I recommend you use tools from standard library to work with screen instead of using VGA driver functions**
+</details>
+
+##  🏁 Get started
+***I DON'T recommend to try Mist on real PC. Instead of this use QEMU***
+Also you should have GCC to compile Mist
+> **Recomendation** ~~(Again...)~~: Use Linux to this
+You can start with 2 ways:
+1. Compile by yourself
+<details>
+  1. Clone Mist repo:
+  ```
+  git clone https://github.com/L-fyz/Mist
+  ```
+  2. Compile (GCC):
+  ```
+  cd ~/Mist
+  make
+  ```
+  3. Run with QEMU:
+  ```
+  make run
+  ```
+</details>
+2. Use already compiled Mist.img from repo
+<details>
+  1. Copy Mist.img:
+  ```
+  wget https://raw.githubusercontent.com/L-fyz/Mist/main/Mist.img ~/Mist
+  ```
+  2. Run with QEMU:
+  ```
+  qemu-system-x86_64 -drive format=raw,file=Mist.img -no-reboot
+  ```
+</details>
+
+## 😰 Issues
+***Mist - young project made by schoolboy***
+It can include many errors and bugs
+
+If you have one of these, you can visit the [issues](https://github.com/L-fyz/Mist/issues)
+Also you can do pull requests with your code. You'r welcome!
