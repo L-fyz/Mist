@@ -108,7 +108,7 @@ You can start with 2 ways:
 
 Compile by yourself
 
-<details>
+- <details>
 
   - Clone Mist repo:
 
@@ -127,10 +127,10 @@ Compile by yourself
   make run
   ```
 
-</details>
+- </details>
 
 Use already compiled Mist.img from repo
-<details>
+- <details>
 
   - Copy Mist.img:
   ```
@@ -141,7 +141,7 @@ Use already compiled Mist.img from repo
   qemu-system-x86_64 -drive format=raw,file=Mist.img -no-reboot
   ```
 
-</details>
+- </details>
 
 ## 😰 Issues
 ***Mist - young project made by schoolboy***
