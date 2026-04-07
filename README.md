@@ -65,8 +65,8 @@ A tool that has a bitmap of all pages and tracks their statuses (1 - already all
 Also it have some functions you can use in your kernel-level programs (And it will be used by many of tools that I will make later)
 
 |Function                |What it does                                    |
-|:----------------------:|:----------------------------------------------:|
-|pmm_init()              |Inits the PMM                                   |
+|:----------------------:|:-----------------------------------------------|
+|`pmm_init()`            |Inits the PMM                                   |
 |`alloc()`               |Gives addresses of free page with lowest address|
 |`pmm_free(addr of page)`|Clear status of given page                      |
 
@@ -90,7 +90,7 @@ Table of functions that it have:
 It have couple of functions that using by any functions in standard library
 
 |Name                  |What it does                                    |
-|:--------------------:|:----------------------------------------------:|
+|:--------------------:|:-----------------------------------------------|
 |`vga_clear()`         |Clears the screen without moving cursor         |
 |`vga_putchar(x, y, c)`|Puts c to place that have (x, y) coordinates    |
 |`vga_getchar(x, y)`   |Returns character that was on (x, y) coordinates|
@@ -106,7 +106,7 @@ Also you should have GCC to compile Mist
 > **Recommendation** ~~(Again...)~~: Use Linux to this
 You can start with 2 ways:
 
-- Compile by yourself
+Compile by yourself
 
 <details>
 
@@ -129,7 +129,7 @@ You can start with 2 ways:
 
 </details>
 
-- Use already compiled Mist.img from repo
+Use already compiled Mist.img from repo
 <details>
 
   - Copy Mist.img:
