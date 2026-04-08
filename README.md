@@ -60,6 +60,7 @@ Mist currently has a few essential components:
 
 <details>
 
+
 - **PMM:**
 
 A tool that has a bitmap of all pages and tracks their statuses (1 - already allocated; 0 - free)
@@ -109,6 +110,7 @@ It have couple of functions that using by any functions in standard library
 
 Also you should have GCC to compile Mist
 > **Recommendation** ~~(Again...)~~: Use Linux to this
+
 You can start with 2 ways:
 
 Compile by yourself
@@ -118,7 +120,7 @@ Compile by yourself
   - Clone Mist repo:
 
   ```
-  git clone https://github.com/L-fyz/Mist
+  git clone https://github.com/ImLfyz/Mist
   ```
   - Compile (GCC):
 
@@ -139,7 +141,7 @@ Use already compiled Mist.img from repo
 
   - Copy Mist.img:
   ```
-  wget https://raw.githubusercontent.com/L-fyz/Mist/main/Mist.img ~/Mist
+  wget https://raw.githubusercontent.com/ImLfyz/Mist/main/Mist.img ~/Mist
   ```
   - Run with QEMU:
   ```
