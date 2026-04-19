@@ -21,6 +21,7 @@ void __attribute__((section(".text.start"), noreturn)) main(void) {
 
     if (!pmm_init()) {
         print_str("\n[FAIL]: PMM initialization");
+        print_str("\n[WARN]: System halted. Reboot required");
         for (;;) __asm__ volatile("hlt");
     } else {
         print_str("\n[ OK ]: PMM initialization");
@@ -28,9 +29,19 @@ void __attribute__((section(".text.start"), noreturn)) main(void) {
 
     if (!vmm_init()) {
         print_str("\n[FAIL]: VMM initialization");
+        print_str("\n[WARN]: System halted. Reboot required");
         for (;;) __asm__ volatile("hlt");
     } else {
         print_str("\n[ OK ]: VMM initialization");
     }
+
+    if (!idt_init()) {
+        print_str("\n[FAIL]: IDT initialization");
+        print_str("\n[WARN]: System halted. Reboot required");
+        for (;;) __asm__ volatile("hlt");
+    } else {
+        print_str("\n[ OK ]: IDT initialization");
+    }
+    __asm__ volatile("ud2");
     for (;;) __asm__ volatile("hlt");
 }

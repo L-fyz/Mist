@@ -17,9 +17,9 @@ Mist currently has a few essential components:
   - Own standard C library
   - VGA driver
   - VMM
+  - IDT
 
 - Todo:
-  - [ ] IDT
   - [ ] Keyboard driver
   - [ ] Shell
   - [ ] Some utils
@@ -89,6 +89,12 @@ Also it has some functions you can use in your kernel-level programs:
 |`vmm_alloc(int id, u64 virt, u64 phys, u64 flags)`|Maps virtual page to physical frame, creates tables if needed   |
 |`pt_switch(int ptid)`                             |Switches address space by loading PML4 into `CR3`               |
 
+- **IDT:**
+
+Table of interrupts descriptors. (Im too lazy to explain this...)
+
+The only function you need to know is `idt_init()` that initializes IDT
+
 - **Standard C library:**
 
 Import:
@@ -110,6 +116,9 @@ Table of functions that it have:
 |`print_bin(u64 i)`                               |Use print_str() and u2s() to print binary numbers                             |
 |`print_oct(u64 i)`                               |Use print_str() and u2s() to print octal numbers                              |
 |`u2s(u64 val, char* buf, u8 base)`               |Convert number with selected base to string                                   |
+|`strlen(const char* str)`                        |Returns length of given string                                                |
+|`isstreq(const char* a, const char* b)`          |Returns 1 if a>b, -1 if a<b, 0 if a=b and 2 if a=NULL or b=NULL               |
+|`strcopy(const char* a, char* b)`                |Copy a string to b with '\0' at and. Safe copy                                |
 
 - **VGA driver:**
 

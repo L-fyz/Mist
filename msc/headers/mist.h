@@ -8,3 +8,4 @@
 #include "PMM.h"
 #include "VMM.h"
 #include "VGA.h"
+#include "IDT.h"
