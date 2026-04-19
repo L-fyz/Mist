@@ -16,9 +16,9 @@ Mist currently has a few essential components:
   - PMM
   - Own standard C library
   - VGA driver
+  - VMM
 
 - Todo:
-  - [ ] VMM
   - [ ] IDT
   - [ ] Keyboard driver
   - [ ] Shell
@@ -71,6 +71,23 @@ Also it have some functions you can use in your kernel-level programs (And it wi
 |`pmm_init()`            |Inits the PMM                                   |
 |`alloc()`               |Gives addresses of free page with lowest address|
 |`pmm_free(addr of page)`|Clear status of given page                      |
+
+- **VMM:**
+
+Virtual Memory Manager. Handles virtual-to-physical address translation and manages page tables dynamically *(until I implement the scheduler)*.
+
+It has:
+- `ptt[]` — Array storing physical addresses of all active PML4 root tables
+- `pts` — Bitmask tracking which PML4 slots are used (`1`) or free (`0`)
+
+Also it has some functions you can use in your kernel-level programs:
+
+|Function                                          |What it does                                                    |
+|:------------------------------------------------:|:---------------------------------------------------------------|
+|`vmm_init()`                                      |Initializes VMM, reads kernel PML4 from `CR3`, reserves slot `0`|
+|`vmm_create_process()`                            |Creates new PML4 for process, copies kernel mappings, returns ID|
+|`vmm_alloc(int id, u64 virt, u64 phys, u64 flags)`|Maps virtual page to physical frame, creates tables if needed   |
+|`pt_switch(int ptid)`                             |Switches address space by loading PML4 into `CR3`               |
 
 - **Standard C library:**
 
