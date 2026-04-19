@@ -2,7 +2,7 @@ OUTPUT_FORMAT("elf64-x86-64")
 ENTRY(main)
 
 SECTIONS {
-    . = 0x100000;  /* Ядро начнётся с виртуального адреса 1MB */
+    . = 0x100000;
 
     .text : {
         *(.text.start)

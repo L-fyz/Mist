@@ -5,5 +5,5 @@
 #include "screen.h"
 #include "alloc.h"
 #include "debug.h"
-#include <./../PMM.h>
-#include <./../VMM.h>
+#include "PMM.h"
+#include "VMM.h"
