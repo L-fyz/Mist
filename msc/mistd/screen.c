@@ -1,5 +1,4 @@
-#include "types.h"
-#include "VGA.h"
+#include "mist.h"
 #define vga ((volatile u16*)0xB8000)
 
 static u16 cursor_x = 0;
@@ -29,9 +28,29 @@ void putchar(char c) {
     }
 }
 
-void print(const char* c) {
+void print_str(const char* c) {
     while (*c) {
         putchar(*c);
         c++;
     }
+}
+
+void print_dec(u64 i) {
+    char* string = u2s(i, str, 10);
+    print_str(string);
+}
+
+void print_hex(u64 i) {
+    char* string = u2s(i, str, 16);
+    print_str(string);
+}
+
+void print_bin(u64 i) {
+    char* string = u2s(i, str, 2);
+    print_str(string);
+}
+
+void print_oct(u64 i) {
+    char* string = u2s(i, str, 8);
+    print_str(string);
 }

@@ -96,15 +96,20 @@ Import:
 #include <mist.h>
 ```
 Table of functions that it have:
-|Name               |What it does                                                                  |
-|:-----------------:|:-----------------------------------------------------------------------------|
-|`copy(ab, cd, n)`  |Clone n bytes from cd to ab                                                   |
-|`copyfb(ab, cd, n)`|Same as copy(), but from the back                                             |
-|`fill(ab, c, n)`   |Fill ab with c n times                                                        |
-|`iseq(ab, cd, n)`  |Check the equality of ab and cd (True - ab==cd; False - ab!=cd)               |
-|`clear()`          |Clears the screen and moves cursor to left up of screen                       |
-|`putchar(a)`       |Insert a to the cursor place and move cursor right (Down if screen width ends)|
-|`print(str)`       |Just print... You know                                                        |
+|Name                 |What it does                                                                  |
+|:-------------------:|:-----------------------------------------------------------------------------|
+|`copy(void* dst, void* src, usize n)`            |Clone n bytes from cd to ab                                                   |
+|`copyfb(void* dst, void src, usize n)`           |Same as copy(), but from the back                                             |
+|`fill(void* dst, void* src, usize n)`            |Fill ab with c n times                                                        |
+|`iseq(const void* a, const void* b, usize n)`    |Check the equality of ab and cd (True - ab==cd; False - ab!=cd)               |
+|`clear()`                                        |Clears the screen and moves cursor to left up of screen                       |
+|`putchar(char a)`                                |Insert a to the cursor place and move cursor right (Down if screen width ends)|
+|`print_str(const char* str)`                     |Just print... You know                                                        |
+|`print_hex(u64 i)`                               |Use print_str() and u2s() to print hexadecimal numbers                        |
+|`print_dec(u64 i)`                               |Use print_str() and u2s() to print decimal numbers                            |
+|`print_bin(u64 i)`                               |Use print_str() and u2s() to print binary numbers                             |
+|`print_oct(u64 i)`                               |Use print_str() and u2s() to print octal numbers                              |
+|`u2s(u64 val, char* buf, u8 base)`               |Convert number with selected base to string                                   |
 
 - **VGA driver:**
 
@@ -128,8 +133,7 @@ Also you should have GCC to compile Mist
 > **Recommendation** ~~(Again...)~~: Use Linux to this
 You can start with 2 ways:
 
-Compile by yourself
-
+Compile by yourself:
 - <details>
 
   - Clone Mist repo:
@@ -151,12 +155,12 @@ Compile by yourself
 
 </details>
 
-Use already compiled Mist.img from repo
+Use already compiled Mist.img from releases:
 - <details>
 
   - Copy Mist.img:
   ```
-  wget https://raw.githubusercontent.com/L-fyz/Mist/main/Mist.img ~/Mist
+  wget https://github.com/L-fyz/Mist/releases/download/v0.2/Mist.img ~/Mist
   ```
   - Run with QEMU:
   ```

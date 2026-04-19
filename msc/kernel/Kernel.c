@@ -2,37 +2,35 @@
 
 void __attribute__((section(".text.start"), noreturn)) main(void) {
     clear();
-    print("                         @#");
-    print("\n              %(        }##");
-    print("\n             ##>       <#:#");
-    print("\n            #01#      ## ##");
-    print("\n           &# ##     ##  <>");
-    print("\n          #?  ##    ##    /n");
-    print("\n         >#    ##  ##      [#");
-    print("\n        #@     (# #)        #^");
-    print("\n      ?*        -_-          #*#");
-    print("\n    #&                        $##%");
-    print("\n  <#                            #0#1");
-    print("\n#@                                #+#=]");
-    print("\n                                    {#!#}");
-    print("\n                                      ?#@;#{");
-    print("\n -- Welcome to Mist!");
-    print("\n\nStarting...");
+    print_str("                         @#");
+    print_str("\n              %(        }##");
+    print_str("\n             ##>       <#:#");
+    print_str("\n            #01#      ## ##");
+    print_str("\n           &# ##     ##  <>");
+    print_str("\n          #?  ##    ##    /n");
+    print_str("\n         >#    ##  ##      [#");
+    print_str("\n        #@     (# #)        #^");
+    print_str("\n      ?*        -_-          #*#");
+    print_str("\n    #&                        $##%");
+    print_str("\n  <#                            #0#1");
+    print_str("\n#@                                #+#=]");
+    print_str("\n                                    {#!#}");
+    print_str("\n                                      ?#@;#{");
+    print_str("\n -- Welcome to Mist!");
+    print_str("\n\nStarting...");
 
     if (!pmm_init()) {
-        print("\n[ - ]: PMM initialization");
+        print_str("\n[FAIL]: PMM initialization");
         for (;;) __asm__ volatile("hlt");
     } else {
-        print("\n[ + ]: PMM initialization");
+        print_str("\n[ OK ]: PMM initialization");
     }
 
     if (!vmm_init()) {
-        print("\n[ - ]: VMM initialization");
+        print_str("\n[FAIL]: VMM initialization");
         for (;;) __asm__ volatile("hlt");
     } else {
-        print("\n[ + ]: VMM initialization");
+        print_str("\n[ OK ]: VMM initialization");
     }
-
-    idt_init();
     for (;;) __asm__ volatile("hlt");
 }

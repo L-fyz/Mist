@@ -1,6 +1,9 @@
 C_SRCS   := $(wildcard msc/drivers/*.c msc/kernel/*.c msc/mistd/*.c)
 ASM_SRCS := $(wildcard msc/kernel/*.asm)
-ALL_OBJS := $(C_SRCS:.c=.o) $(ASM_SRCS:.asm=.o)
+
+C_OBJS   := $(C_SRCS:msc/%.c=mbin/%.o)
+ASM_OBJS := $(ASM_SRCS:msc/%.asm=mbin/%.o)
+ALL_OBJS := $(C_OBJS) $(ASM_OBJS)
 
 BUILD_DIR := mbin
 
@@ -21,11 +24,11 @@ $(BUILD_DIR)/kernel/Kernel.bin: $(BUILD_DIR)/kernel/Kernel.elf
 $(BUILD_DIR)/Mist.img: $(BUILD_DIR)/Minit/BootLoader.bin $(BUILD_DIR)/kernel/Kernel.bin
 	cat $^ > $@
 
-%.o: %.c
+mbin/%.o: msc/%.c
 	@mkdir -p $(dir $@)
 	clang --target=x86_64-elf -ffreestanding -fno-stack-protector -mno-red-zone -mno-sse -mno-sse2 -fno-pie -fno-builtin -nostdlib -O2 -Wall -Wextra -Imsc/headers -c $< -o $@
 
-%.o: %.asm
+mbin/%.o: msc/%.asm
 	@mkdir -p $(dir $@)
 	nasm -f elf64 $< -o $@
 
