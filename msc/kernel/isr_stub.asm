@@ -16,6 +16,31 @@ isr%1:
     jmp isr_common
 %endmacro
 
+%macro IRQ 1
+global isr%1
+isr%1:
+    push qword 0
+    push qword %1
+    jmp isr_common
+%endmacro
+
+IRQ 32
+IRQ 33
+IRQ 34
+IRQ 35
+IRQ 36
+IRQ 37
+IRQ 38
+IRQ 39
+IRQ 40
+IRQ 41
+IRQ 42
+IRQ 43
+IRQ 44
+IRQ 45
+IRQ 46
+IRQ 47
+
 ISR_NOERR 0
 ISR_NOERR 1
 ISR_NOERR 2

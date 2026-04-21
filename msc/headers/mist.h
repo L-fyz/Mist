@@ -9,3 +9,4 @@
 #include "VMM.h"
 #include "VGA.h"
 #include "IDT.h"
+#include "PIC.h"

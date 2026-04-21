@@ -42,6 +42,10 @@ void __attribute__((section(".text.start"), noreturn)) main(void) {
     } else {
         print_str("\n[ OK ]: IDT initialization");
     }
-    __asm__ volatile("ud2");
+
+    pic_remap(0x20, 0x28);
+
+    __asm__ volatile("sti");
+
     for (;;) __asm__ volatile("hlt");
 }

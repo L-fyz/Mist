@@ -26,33 +26,37 @@ static void idt_load(void) {
 }
 
 void isr_handler(u8 vector, u64 error_code) {
-    print_str("\n[PANIC]: ");
-
     if (vector < 32) {
-        static const char* names[] = {
-            "#DE", "#DB", "NMI", "#BP", "#OF", "#BR", "#UD", "#NM",
-            "#DF", "???", "#TS", "#NP", "#SS", "#GP", "#PF", "#MF",
-            "#AC", "#MC", "#SIMD", "#VE", "#CP", "???", "???", "???",
-            "???", "???", "???", "???", "#VE", "#VC", "#SX", "???"
-        };
-        print_str(names[vector]);
-    }
+        print_str("\n[PANIC]: ");
 
-    print_str(" on 0x");
-    print_hex(error_code);
-    print_str(". ");
+        if (vector < 32) {
+            static const char* names[] = {
+                "#DE", "#DB", "NMI", "#BP", "#OF", "#BR", "#UD", "#NM",
+                "#DF", "???", "#TS", "#NP", "#SS", "#GP", "#PF", "#MF",
+                "#AC", "#MC", "#SIMD", "#VE", "#CP", "???", "???", "???",
+                "???", "???", "???", "???", "#VE", "#VC", "#SX", "???"
+            };
+            print_str(names[vector]);
+        }
 
-    if (vector == 14) {
-        u64 cr2;
-        __asm__ volatile("mov %%cr2, %0" : "=r"(cr2));
-        print_str("Faulting Address: 0x");
-        print_hex(cr2);
+        print_str(" on 0x");
+        print_hex(error_code);
         print_str(". ");
-    }
+    
+        if (vector == 14) {
+            u64 cr2;
+            __asm__ volatile("mov %%cr2, %0" : "=r"(cr2));
+            print_str("Faulting Address: 0x");
+            print_hex(cr2);
+            print_str(". ");
+        }
 
-    print_str("System halted. Reset required\n\n");
-    __asm__ volatile("cli; hlt");
-    while(1);
+        print_str("System halted. Reset required\n\n");
+        __asm__ volatile("cli; hlt");
+        while(1);
+    } else {
+        pic_send_eoi(vector);
+    }
 }
 
 static void idt_set_gate(u8 vector, void* handler, u8 type, u8 dpl) {
@@ -109,6 +113,34 @@ bool idt_init(void) {
     for (int i = 0; i < 32; i++) {
         u8 type = (i == 2 || i == 18) ? 0x0E : 0x0F;
         idt_set_gate(i, stubs[i], type, 0);
+    }
+
+    extern void isr32(void);
+    extern void isr33(void);
+    extern void isr34(void);
+    extern void isr35(void);
+    extern void isr36(void);
+    extern void isr37(void);
+    extern void isr38(void); 
+    extern void isr39(void);
+    extern void isr40(void);
+    extern void isr41(void);
+    extern void isr42(void); 
+    extern void isr43(void);
+    extern void isr44(void); 
+    extern void isr45(void);
+    extern void isr46(void); 
+    extern void isr47(void);
+
+// ... твой цикл 0-31 ...
+
+// Регистрируем IRQ 0-15 (Interrupt Gate, DPL 0)
+    void* irq_stubs[16] = {
+        isr32, isr33, isr34, isr35, isr36, isr37, isr38, isr39,
+        isr40, isr41, isr42, isr43, isr44, isr45, isr46, isr47
+    };
+    for (int i = 0; i < 16; i++) {
+        idt_set_gate(0x20 + i, irq_stubs[i], 0x0E, 0);
     }
 
     idt_load();

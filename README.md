@@ -169,7 +169,7 @@ Use already compiled Mist.img from releases:
 
   - Copy Mist.img:
   ```
-  wget https://github.com/L-fyz/Mist/releases/download/v0.2/Mist.img ~/Mist
+  wget https://github.com/L-fyz/Mist/releases/download/v0.4/Mist.img ~/Mist
   ```
   - Run with QEMU:
   ```
