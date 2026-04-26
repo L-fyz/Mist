@@ -3,143 +3,21 @@
 
 ## ❓ What is it?
 ***Mist* is a simple x86_64 operating system made for learning how the PC works**
+It uses MIT license so you can do anything with this code!
 
-## 🛠️ How does it work?
-Mist currently has a few essential components:
-- Bootloader
-  - Paging
-  - GDT setup
-  - A20 setup
-  - Kernel loading to memory
-
-- Kernel
-  - PMM
-  - Own standard C library
-  - VGA driver
-  - VMM
-  - IDT
-
-- Todo:
-  - [ ] Keyboard driver
-  - [ ] Shell
-  - [ ] Some utils
-  - [ ] etc.
-
-### Explanation...
-<details>
-
-#### 🥇 Bootloader
-
-<details>
-
-- **Paging:**
-  - Address of PML4: 0x1000
-  - Address of PDPT: 0x2000
-  - Address of PD: 0x3000
-  - __No__ PT: There are 2MB pages
-
-- **GDT:**
-  - GDT settings you can see at the end of boot/BootLoader.asm
-
-- **A20:**
-  - Same as GDT
-
-- **Kernel load:**
-  - Firstly kernel is loaded to the 0x10000 with BIOS interrupts
-  - Then it moves to 0x100000 using a loop
-  - It calls with:
-
-  ```nasm
-  mov rax, 0x100000
-  call rax
-  ```
-
-</details>
-
-#### 🎯 Kernel
-
-<details>
-
-- **PMM:**
-
-A tool that has a bitmap of all pages and tracks their statuses (1 - already allocated; 0 - free)
-
-Also it have some functions you can use in your kernel-level programs (And it will be used by many of tools that I will make later)
-
-|Function                |What it does                                    |
-|:----------------------:|:-----------------------------------------------|
-|`pmm_init()`            |Inits the PMM                                   |
-|`alloc()`               |Gives addresses of free page with lowest address|
-|`pmm_free(addr of page)`|Clear status of given page                      |
-
-- **VMM:**
-
-Virtual Memory Manager. Handles virtual-to-physical address translation and manages page tables dynamically *(until I implement the scheduler)*.
-
-It has:
-- `ptt[]` — Array storing physical addresses of all active PML4 root tables
-- `pts` — Bitmask tracking which PML4 slots are used (`1`) or free (`0`)
-
-Also it has some functions you can use in your kernel-level programs:
-
-|Function                                          |What it does                                                    |
-|:------------------------------------------------:|:---------------------------------------------------------------|
-|`vmm_init()`                                      |Initializes VMM, reads kernel PML4 from `CR3`, reserves slot `0`|
-|`vmm_create_process()`                            |Creates new PML4 for process, copies kernel mappings, returns ID|
-|`vmm_alloc(int id, u64 virt, u64 phys, u64 flags)`|Maps virtual page to physical frame, creates tables if needed   |
-|`pt_switch(int ptid)`                             |Switches address space by loading PML4 into `CR3`               |
-
-- **IDT:**
-
-Table of interrupts descriptors. (Im too lazy to explain this...)
-
-The only function you need to know is `idt_init()` that initializes IDT
-
-- **Standard C library:**
-
-Import:
-```C
-#include <mist.h>
-```
-Table of functions that it have:
-|Name                 |What it does                                                                  |
-|:-------------------:|:-----------------------------------------------------------------------------|
-|`copy(void* dst, void* src, usize n)`            |Clone n bytes from cd to ab                                                   |
-|`copyfb(void* dst, void src, usize n)`           |Same as copy(), but from the back                                             |
-|`fill(void* dst, void* src, usize n)`            |Fill ab with c n times                                                        |
-|`iseq(const void* a, const void* b, usize n)`    |Check the equality of ab and cd (True - ab==cd; False - ab!=cd)               |
-|`clear()`                                        |Clears the screen and moves cursor to left up of screen                       |
-|`putchar(char a)`                                |Insert a to the cursor place and move cursor right (Down if screen width ends)|
-|`print_str(const char* str)`                     |Just print... You know                                                        |
-|`print_hex(u64 i)`                               |Use print_str() and u2s() to print hexadecimal numbers                        |
-|`print_dec(u64 i)`                               |Use print_str() and u2s() to print decimal numbers                            |
-|`print_bin(u64 i)`                               |Use print_str() and u2s() to print binary numbers                             |
-|`print_oct(u64 i)`                               |Use print_str() and u2s() to print octal numbers                              |
-|`u2s(u64 val, char* buf, u8 base)`               |Convert number with selected base to string                                   |
-|`strlen(const char* str)`                        |Returns length of given string                                                |
-|`isstreq(const char* a, const char* b)`          |Returns 1 if a>b, -1 if a<b, 0 if a=b and 2 if a=NULL or b=NULL               |
-|`strcopy(const char* a, char* b)`                |Copy a string to b with '\0' at and. Safe copy                                |
-
-- **VGA driver:**
-
-It have couple of functions that using by any functions in standard library
-
-|Name                  |What it does                                    |
-|:--------------------:|:-----------------------------------------------|
-|`vga_clear()`         |Clears the screen without moving cursor         |
-|`vga_putchar(x, y, c)`|Puts c to place that have (x, y) coordinates    |
-|`vga_getchar(x, y)`   |Returns character that was on (x, y) coordinates|
-
-**I recommend you use tools from standard library to work with screen instead of using VGA driver functions**
-
-</details>
-</details>
+## 🤔 What it can?
+A lot of things. You can see explanation of:
+- [Minit](https://github.com/ImLfyz/Mist/tree/main/msc/Minit)
+- [Drivers](https://github.com/ImLfyz/Mist/tree/main/msc/drivers)
+- [Kernel](https://github.com/ImLfyz/Mist/tree/main/msc/kernel)
+- [Mistd](https://github.com/ImLfyz/Mist/tree/main/msc/mistd)
+- [Utils](https://github.com/ImLfyz/Mist/tree/main/msc/utils)
 
 ##  🏁 Get started
 ***I DON'T recommend to try Mist on real PC. Instead of this use QEMU***
 
 Also you should have GCC to compile Mist
-> **Recommendation** ~~(Again...)~~: Use Linux to this
+> **Recommendation**: Use Linux to this
 You can start with 2 ways:
 
 Compile by yourself:
@@ -169,7 +47,7 @@ Use already compiled Mist.img from releases:
 
   - Copy Mist.img:
   ```
-  wget https://github.com/L-fyz/Mist/releases/download/v0.4/Mist.img ~/Mist
+  wget https://github.com/L-fyz/Mist/releases/download/v0.8/Mist.img ~/Mist
   ```
   - Run with QEMU:
   ```
