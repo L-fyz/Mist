@@ -1,11 +1,11 @@
 #pragma once
-#include "types.h"
 
-void cursor_upd(int cursor_x, int cursor_y);
+extern u16 cursor_x;
+extern u16 cursor_y;
+
+void cursor_upd(int x, int y);
 void clear(void);
 void putchar(char i);
+void delchar(void);
 void print_str(const char* c);
-void print_dec(u64 i);
-void print_hex(u64 i);
-void print_bin(u64 i);
-void print_oct(u64 i);
+void print_num(u64 i, int base);

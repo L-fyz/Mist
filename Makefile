@@ -1,4 +1,4 @@
-C_SRCS   := $(wildcard msc/drivers/*.c msc/kernel/*.c msc/mistd/*.c)
+C_SRCS   := $(wildcard msc/drivers/*.c msc/kernel/*.c msc/mistd/*.c msc/utils/*.c)
 ASM_SRCS := $(wildcard msc/kernel/*.asm)
 
 C_OBJS   := $(C_SRCS:msc/%.c=mbin/%.o)

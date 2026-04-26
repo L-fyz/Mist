@@ -23,7 +23,6 @@ static IDTr idtr;
 static void idt_load(void) {
     idtr.limit = sizeof(idt_entry) * 256 - 1;
     idtr.base  = (u64)&idt;
-
     __asm__ volatile("lidt %0" : : "m"(idtr));
 }
 
@@ -37,17 +36,16 @@ void isr_handler(u8 vector, u64 error_code) {
             "???", "???", "???", "???", "#VE", "#VC", "#SX", "???"
         };
         print_str(names[vector]);
-        print_str(" on 0x"); print_hex(error_code); print_str(". ");
+        print_str(" on 0x"); print_num(error_code, 16); print_str(". ");
         
         if (vector == 14) {
             u64 cr2; __asm__ volatile("mov %%cr2, %0" : "=r"(cr2));
-            print_str("Faulting Address: 0x"); print_hex(cr2); print_str(". ");
+            print_str("Faulting Address: 0x"); print_num(cr2, 16); print_str(". ");
         }
         print_str("System halted. Reset required\n\n");
         __asm__ volatile("cli; hlt"); while(1);
     } else {
         if (vector == 0x21) kbd_handle_irq(error_code);
-        
         pic_send_eoi(vector);
         return;
     }
@@ -55,13 +53,13 @@ void isr_handler(u8 vector, u64 error_code) {
 
 void idt_set_gate(u8 vector, void* handler, u8 type, u8 dpl) {
     u64 addr = (u64)handler;
-    idt[vector].offset_low  = addr & 0xFFFF;
-    idt[vector].selector    = 0x18;
-    idt[vector].ist         = 0;
-    idt[vector].type_attr   = (1 << 7) | (dpl << 5) | type;
-    idt[vector].offset_mid  = (addr >> 16) & 0xFFFF;
+    idt[vector].offset_low = addr & 0xFFFF;
+    idt[vector].selector = 0x18;
+    idt[vector].ist = 0;
+    idt[vector].type_attr = (1 << 7) | (dpl << 5) | type;
+    idt[vector].offset_mid = (addr >> 16) & 0xFFFF;
     idt[vector].offset_high = (addr >> 32) & 0xFFFFFFFF;
-    idt[vector].reserved    = 0;
+    idt[vector].reserved = 0;
 }
 
 extern void isr0(void);
@@ -98,14 +96,21 @@ extern void isr30(void);
 extern void isr31(void);
 
 bool idt_init(void) {
-    for (int i = 0; i < 256; i++) idt_set_gate(i, 0, 0, 0);
+    for (int i = 0; i < 256; i++) {
+        idt_set_gate(i, 0, 0, 0);
+    }
 
     void* stubs[32] = {
         isr0, isr1, isr2, isr3, isr4, isr5, isr6, isr7, isr8, isr9, isr10, isr11, isr12, isr13, isr14, isr15, isr16, isr17, isr18, isr19, isr20, isr21, isr22, isr23, isr24, isr25, isr26, isr27, isr28, isr29, isr30, isr31
     };
 
     for (int i = 0; i < 32; i++) {
-        u8 type = (i == 2 || i == 18) ? 0x0E : 0x0F;
+        u8 type; 
+        if (i == 2 || i == 18) {
+            type = 0x0E;
+        } else {
+            type = 0x0F;
+        }
         idt_set_gate(i, stubs[i], type, 0);
     }
 

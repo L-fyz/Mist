@@ -43,24 +43,11 @@ void __attribute__((section(".text.start"), noreturn)) main(void) {
         print_str("\n[ OK ]: IDT initialization");
     }
 
-    pic_remap(0x20, 0x28);
     kbd_init();
 
     __asm__ volatile("sti");
 
-    print_str("\n_> ");
-
-    while (1) {
-        char c = kbd_getchar();
-        if (c == '\b') {
-            print_str("<BS>");
-        } else if (c == '\n') {
-            putchar(c);
-            print_str("_> ");
-        } else if (c >= 0x20 && c <= 0x7E) {
-            putchar(c);
-        }
-}
+    shell_init();
 
     for (;;) __asm__ volatile("hlt");
 }

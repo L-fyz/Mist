@@ -11,3 +11,4 @@
 #include "IDT.h"
 #include "PIC.h"
 #include "keyboard.h"
+#include "shell.h"
